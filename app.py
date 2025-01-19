@@ -7,8 +7,8 @@ app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
 # Ensure downloads folder exists
-if not os.path.exists('downloads'):
-    os.makedirs('downloads')
+if not os.path.exists(os.path.join(os.path.expanduser('~'), 'Downloads')):
+    os.makedirs(os.path.join(os.path.expanduser('~'), 'Downloads'))
 
 @app.route('/download', methods=['GET'])
 def download_video():
@@ -19,7 +19,7 @@ def download_video():
     try:
         # Define options for yt-dlp (best combined format)
         ydl_opts = {
-            'outtmpl': 'downloads/%(title)s.%(ext)s',  # Save in downloads folder
+            'outtmpl': os.path.join(os.path.expanduser('~'), 'Downloads', '%(title)s.%(ext)s'),  # Save in user's Downloads folder
             'format': 'best',      # Download best combined format
             'noplaylist': True,    # Don't download entire playlist
         }
@@ -39,4 +39,3 @@ def download_video():
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
- 
